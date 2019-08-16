@@ -1,6 +1,21 @@
 ---
 - hosts: apache
   sudo: yes
+
+  pre_tasks:
+    - name: Update apt
+      become: yes
+      apt: 
+        cache_valid_time: 1800
+        update_cache: yes
+
   tasks:
     - name: install apache*
       apt: name=apache update_cache=yes state=latest
+
+    - name: ensure apache is running
+      service: 
+        name: httpd
+        state: started
+
+
