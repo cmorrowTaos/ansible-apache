@@ -1,6 +1,7 @@
 ---
 - hosts: apache
-  sudo: yes
+  #sudo: yes
+  become: yes
 
   pre_tasks:
     - name: Update apt
@@ -18,4 +19,11 @@
         name: httpd
         state: started
 
+        #  - name: copy files
+        #copy: src={item.src} dest={item.dest} owner={item.owner} group={item.group} mode={item.mode}
+        # with_items:
+        # notify: httpd restart
 
+  handlers: 
+      - name: httpd restart
+        service: name=httpd state=reloaded
