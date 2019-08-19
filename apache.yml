@@ -10,19 +10,10 @@
         update_cache: yes
 
   tasks:
-    - name: install apache*
-      apt: name=apache update_cache=yes state=latest
+    - name: install apache2
+      apt: name=apache2 update_cache=yes state=latest
 
-    - name: ensure apache is running
-      service: 
-        name: httpd
-        state: started
-
-    - name: enabled mod_rewrite
-      apache_module: name=rewrite state=present
-      notify:
-        - restart apache
 
   handlers: 
-      - name: restart apache
+      - name: restart apache2
         service: name=apache state=reloaded
