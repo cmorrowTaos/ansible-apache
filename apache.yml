@@ -1,39 +1,28 @@
 ---
-- hosts: apache
+- hosts: all
   become: yes
+  vars:
+    doc_root: /var/www/html
 
   pre_tasks:
     - name: Update apt
-      become: yes
       apt: 
-        cache_valid_time: 1800
         update_cache: yes
 
   tasks:
     - name: install apache2
-      apt: name=apache2 pkg=httpd update_cache=yes state=latest
+      apt: name=apache2 update_cache=yes state=latest 
+           
+    - name: create custom document root
+      file: path={{ doc_root }} state=directory owner=www-data group=www-data
 
-    - name: ensure httpd is running
-      service: name=httpd enabled=yes state=started
+    - name: set up HTML file
+      copy: src=index.html dest={{ doc_root }}  owner=www-data group=www-data mode=0644
 
-      notify:
-      - start apache2
-      - setup firewalld
-      - reload firewalld
-
-    - name: restart server
+    - name: restart apache
       service: name=apache2 state=restarted
 
   handlers: 
-    - name: start apache2
-      service: name=httpd state=started 
-
-    - name: setup firewalld
-      firewalld:
-        service: http
-        permanent: true
-        state: enabled
-       
     - name: restart apache2
       service: name=apache2 state=restarted 
 
