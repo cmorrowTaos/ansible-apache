@@ -21,7 +21,7 @@
       service: name=apache2 state=restarted 
 
     - name: check status
-      command: /home/cmorrow/ansible-apache apache2 status
+      command: service apache2 status
       changed_when: false
 
   handlers: 
