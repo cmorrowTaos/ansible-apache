@@ -18,7 +18,11 @@
       git: repo=https://github.com/do-community/ansible-apache-tutorial.git dest=/var/www/example.com update=no
 
     - name: restart apache
-      service: name=apache2 state=restarted
+      service: name=apache2 state=restarted 
+
+    - name: check status
+      command: /home/cmorrow/ansible-apache apache2 status
+      changed_when: false
 
   handlers: 
     - name: restart apache2
