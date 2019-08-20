@@ -11,12 +11,29 @@
 
   tasks:
     - name: install apache2
-      apt: name=apache2 update_cache=yes state=latest
+      apt: name=apache2 pkg=httpd update_cache=yes state=latest
+
+    - name: ensure httpd is running
+      service: name=httpd enabled=yes state=started
+
+      notify:
+      - start apache2
+      - setup firewalld
+      - reload firewalld
 
     - name: restart server
       service: name=apache2 state=restarted
 
   handlers: 
+    - name: start apache2
+      service: name=httpd state=started 
+
+    - name: setup firewalld
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+       
     - name: restart apache2
       service: name=apache2 state=restarted 
 
