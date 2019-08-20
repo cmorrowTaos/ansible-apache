@@ -1,8 +1,6 @@
 ---
 - hosts: all
   become: yes
-  vars:
-    doc_root: /var/www/html
 
   pre_tasks:
     - name: Update apt
@@ -12,12 +10,7 @@
   tasks:
     - name: install apache2
       apt: name=apache2 update_cache=yes state=latest 
-           
-    - name: create custom document root
-      file: path={{ doc_root }} state=directory owner=www-data group=www-data
-
-    - name: set up HTML file
-      copy: src=index.html dest={{ doc_root }}  owner=www-data group=www-data mode=0644
+         
 
     - name: restart apache
       service: name=apache2 state=restarted
