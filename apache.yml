@@ -14,7 +14,6 @@
     - name: start apache2
       service: name=apache2 state=started 
 
-      ##need to build out adding services to groups before calling rolling restart per group
 
     - name: adding services to groups
       service: 
@@ -25,7 +24,7 @@
 
     - name: rolling restart per group
       service: 
-        name: group1
+        name: "group1"
         state: restarted
 
     - name: check status
