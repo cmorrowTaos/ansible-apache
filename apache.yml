@@ -1,7 +1,6 @@
 ---
 - hosts: all
   become: yes
-  serial: 1
 
   pre_tasks:
     - name: Update apt
@@ -15,14 +14,13 @@
     - name: start apache2
       service: name=apache2 state=started 
 
-    - name: clone basic html template
-      git: repo=https://github.com/do-community/ansible-apache-tutorial.git dest=/var/www/example.com update=no
+      # - name: add several items to groups
 
-    - name: rolling restart services
+    - name: rolling restart per group
       service: 
-        name: "{{ item }}"
+        name: "{{ group }}"
         state: restarted
-      with_items: groups.webservers 
+      with_items: groups.webservers
 
     - name: check status
       command: service apache2 status
@@ -34,3 +32,4 @@
       service: name=item1 state=restarted 
 
     
+
