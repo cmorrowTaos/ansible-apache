@@ -14,11 +14,19 @@
     - name: start apache2
       service: name=apache2 state=started 
 
-      ##need to build out adding items to groups before calling rolling restart per group
+      ##need to build out adding services to groups before calling rolling restart per group
+
+    - name: adding services to groups
+      service: 
+        name: group1
+      with_items:
+        - apache
+        - gearman
 
     - name: rolling restart per group
-      # service: name=group state=restarted
-      # with_items: groups.webservers
+      service: 
+        name: group1
+        state: restarted
 
     - name: check status
       command: service apache2 status
