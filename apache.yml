@@ -14,12 +14,19 @@
     - name: start apache2
       service: name=apache2 state=started 
 
+    - name: create groups
+      group:
+        name: "{{ item }}"
+      with_items:
+      - group1
+      - group2
 
     - name: adding services to groups
       service: 
-        name: group1
-      with_items:
-        - apache
+        name: "{{ item.name }}"
+        group: "{{ item.group }}"
+      with_items: 
+        - apache 
         - gearman
 
     - name: rolling restart per group
