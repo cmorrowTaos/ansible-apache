@@ -18,13 +18,19 @@
     - name: clone basic html template
       git: repo=https://github.com/do-community/ansible-apache-tutorial.git dest=/var/www/example.com update=no
 
-    - name: restart apache
-      service: name=apache2 state=restarted 
+    - name: rolling restart services
+      service: 
+        name: "{{ item }}"
+        state: restarted
+      with_items: groups.webservers 
 
     - name: check status
       command: service apache2 status
       changed_when: false
 
+
   handlers: 
-    - name: restart apache2
-      service: name=apache2 state=restarted 
+    - name: restart item1
+      service: name=item1 state=restarted 
+
+    
