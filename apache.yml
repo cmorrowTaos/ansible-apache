@@ -31,7 +31,7 @@
 
     - name: rolling restart per group
       service: 
-        name: "group1"
+        name: "{{ group1 }}"
         state: restarted
 
     - name: check status
