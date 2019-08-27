@@ -1,6 +1,7 @@
 ---
 - hosts: all
   become: yes
+  serial: 1
 
   pre_tasks:
     - name: Update apt
@@ -9,28 +10,33 @@
 
   tasks:
     - name: install apache2
-      apt: name=apache2 update_cache=yes state=latest 
+      apt: 
+        name: apache2 
+        update_cache: yes 
+        state: latest 
 
     - name: start apache2
-      service: name=apache2 state=started 
+      service: 
+        name: apache2 
+        state: started 
 
     - name: create groups
-      group:
+      group: 
         name: "{{ item }}"
-      with_items:
-      - group1
-      - group2
+      with_items: 
+        - group1
+        - group2
 
     - name: adding services to groups
       service: 
         name: "{{ item.name }}"
         group: "{{ item.group }}"
       with_items: 
-        - apache 
+        - apache
         - gearman
 
     - name: rolling restart per group
-      service: 
+      group: 
         name: "{{ group1 }}"
         state: restarted
 
@@ -40,8 +46,11 @@
 
 
   handlers: 
-    - name: restart apache
-      service: name=apache state=restarted 
+    - name: restart group1
+      service: name=group1 state=restarted 
+
+    - name: restart group2
+      service: name=group2 state=restarted
 
     
 
